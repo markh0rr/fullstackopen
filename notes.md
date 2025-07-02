@@ -96,6 +96,8 @@ function App() {
 }
 ```
 
+### Classes and This
+
 official name of JS: ECMAScript
 - browsers do not yet support all JS newest features => a lot of code is transpiled to older version of Js, can be done with Babel
 - transpilation is automatically in React apps created with Vite
@@ -125,10 +127,51 @@ class ClassName {
 const instance = new ClassName(arguments)
 ```
 
-destructure values
-- {keName1, keyName2} = object
+Never implement complements within components (makes it impossible for React to optimize the component).
 
+### Destructuring
 
+Destructure values from objects and arrays (especially useful for props):
+```js
+{key1, key2, ..., keyK} = props
+```
+
+The variables will be assigned the value of the corresponding key of the props
+
+### State
+
+The state hook
+```js
+import { useState } from 'react' // import the hook
+
+function App() {
+    const [ stateVariable, stateModifier ] = useState(initialValue)
+}
+```
+
+When the state changes, React re-renders the component, the component function body gets re-executed. `useState` initializes the value of a state variable at first run, otherwise it returns the latest state of the variable.
+
+React best practice: lift the state up in the component hierarchy.
+
+Complex state: 
+- option1: call useState multiple times
+- option2: one single object as the whole state
+
+Object spread synthax 
+```js
+{...allKey, keyToChangeValue: newValue}
+```
+
+It is forbidden to mutate the state directly.
+
+State update happens asynchronously, at some point before the component is rendered again.
+
+Prior to hooks, components that required state had to be defined as class components.
+
+### Event handlers
+
+add handlers to JSX elements
+- `onClick={functionRef}`
 
 ## Part 7: React router
 
@@ -180,4 +223,19 @@ import {useParams} from 'react-router-dom'
 
 let parameter = userParams().parameterName
 ```
+
+## Tools
+
+### Chrome dev tools
+
+pause the execution of the app with the following command
+```
+debugger
+```
+
+addition to chrome: React developer tool, to view the components state 
+
+
+
+
 
