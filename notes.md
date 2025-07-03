@@ -285,6 +285,7 @@ The effect is executed immediately after rendering.
 By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
 - the second parameter is used to specify how often the effect is run
 - - if the second parameter is an empty array [], the effect runs only with the first render 
+- - the second parameter could also be an array of state to observe. change on those would trigger a rerender.
 
 => single responsibity principle: extract the communication into its own module (src/services)
 
@@ -294,6 +295,22 @@ REST, we refer to individual data objects as resources.
 - every resource has a unique address associated with it, its URL
 - Resources are fetched with HTTP GET requests: /resources or /resource/id
 - Resources are inserted with HTTP request to the general URL: /resources
+
+### Adding style to React
+
+import the css file
+```js
+import './index.css'
+```
+
+Give class to elements
+- `className=""`
+
+Reacts also supports inline styles
+- provide a set of css properties as a JS object through the style attribute
+- kebab-case CSS properties are written in camelCase
+
+Since the separation of CSS, HTML, and JavaScript into separate files did not seem to scale well in larger applications, React bases the division of the application along the lines of its logical functional entities.
 
 ## Part 7: React router
 
