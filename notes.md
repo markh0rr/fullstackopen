@@ -50,6 +50,8 @@ npm run dev
 
 The app should be accessible on [localhost:5173](http://localhost:5173)
 
+The dev server stitches together (assemble) JavaScript from different files into one file. We'll discuss the dev-server in more detail in part 7 of the course.
+
 React
 - React Component as a javascript function, export the module so that it can be imported by other js files
 - - tips: compose components to keep the app maintainable, use methods from functional programming
@@ -204,7 +206,58 @@ controlled component
 - provide a onChange handler for value change
 - the new value is in `event.target.value`
 
+### Getting data from the server
 
+JS runtime follows an asynchronous model, all IO operations are executed as non-blocking.
+
+Currently JS engines are single threaded.
+- for the browser to remain responsive it is important 
+- - to keep computation short
+- - have non blocking IO
+
+library for network IO
+- `fetch`, built in
+- `axios`, a npm library 
+
+axios in use:
+```js
+import axios from 'axios'
+
+axios
+    .get("url")
+    .then(result => {
+        // do something
+    })
+```
+
+axios autoamatically parses json responses when the response has the header app/json
+
+three states of promises
+- pending, async operation is not finished yet
+- fulfilled, the operation has been completed and the value is available
+- rejected, an error happened
+
+### Effect-hooks
+
+Effects let a component connect to and synchronize with external systems. 
+
+Import useEffect hook:
+```js
+import { useEffect } from 'react'
+```
+
+Define a use effect every time the component is instantiated:
+```js
+useEffect(() => {
+    
+}, [])
+```
+
+The effect is executed immediately after rendering.
+
+By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
+- the second parameter is used to specify how often the effect is run
+- - if the second parameter is an empty array [], the effect runs only with the first render 
 
 ## Part 7: React router
 
@@ -286,7 +339,37 @@ debugger
 
 addition to chrome: React developer tool, to view the components state 
 
+### Json Server
 
+Fake a REST API with `JSON Server` by providing a json file as the fake db
+```
+npx json-server --port 3001 db.json
+```
 
+### npm
 
+npm: node packet manager
 
+package.json
+
+install a package
+```sh
+npm install package-name
+```
+
+install development dependency
+```sh
+npm install package-name --save-dev
+```
+
+add an action to script:
+```json
+"scripts": {
+    "command": "command content"
+}
+```
+
+run the command:
+```sh
+npm run command
+```
