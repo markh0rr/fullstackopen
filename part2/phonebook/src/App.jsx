@@ -2,18 +2,16 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
-import axios from 'axios'
+import phonebook from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [filter, setNewFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
-      })
+    phonebook
+      .getAllEntries()
+      .then(entries => setPersons(entries))
   }, [])
 
   const handleFilterInputChange = (event) => {
@@ -21,17 +19,40 @@ const App = () => {
   }
 
   const registerNewPerson = (name, number, onSuccessCallback) => {
-    if(persons.filter(person => person.name === name).length > 0) {
-        alert(`${name} is already added to phonebook`)
+    const match = persons.filter(person => person.name === name)
+    if(match.length > 0) {
+      const confirmation = window.confirm(`${name} is already added to phonebook, replace the old number with a new one ?`)
+      if(confirmation) {
+        phonebook
+          .updateEntry(match[0].id, number)
+          .then(updatedEntry => {
+            setPersons(persons.map(person => (person.id !== updatedEntry.id)? person : updatedEntry))
+            onSuccessCallback()
+          })
+      }
     } else {
       const newPerson = {
         name,
-        number,
-        id: String(persons.length+1)
+        number
       }
-      setPersons(persons.concat(newPerson))
-      onSuccessCallback()
+      phonebook
+        .registerNewEntry(newPerson)
+        .then(newEntry => {
+          setPersons(persons.concat(newEntry))
+          onSuccessCallback()
+        })
     }
+  }
+
+  const deleteEntry = (entry) => {
+    const confirmation = window.confirm(`Delete ${entry.name} ?`)
+    if(confirmation) {
+      phonebook
+        .deleteEntry(entry.id)
+        .then(deletedEntry => {
+          setPersons(persons.filter(person => person.id !== deletedEntry.id))
+        })
+    } 
   }
 
   const filteredPerson = (filter !== "")
@@ -45,7 +66,7 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm registerNewPerson={registerNewPerson} />
       <h2>Numbers</h2>
-      <Persons persons={filteredPerson} filter={filter} />
+      <Persons persons={filteredPerson} filter={filter} handleDelete={deleteEntry} />
     </div>
   )
 }

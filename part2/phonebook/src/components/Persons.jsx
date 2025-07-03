@@ -1,23 +1,29 @@
-const Person = ({person, filter}) => {
+const Person = ({person, filter, handleDelete}) => {
   if(filter !== "") {
     const startPosition = person.name.toLowerCase().indexOf(filter.toLowerCase())
     const before = person.name.slice(0, startPosition)
     const match = person.name.slice(startPosition, startPosition + filter.length)
     const after = person.name.slice(startPosition + filter.length, person.name.lenght)
 
-    return <p>{before}<strong>{match}</strong>{after} {person.number}</p>
+    return (
+      <div>
+        {before}<strong>{match}</strong>{after} {person.number} <button onClick={handleDelete}>delete</button>
+      </div>
+    )
   } else {
     return (
-      <p>{person.name} {person.number}</p>
+      <div>
+        {person.name} {person.number} <button onClick={handleDelete}>delete</button>
+      </div>
     )
   }
 }
 
-const Persons = ({persons, filter}) => {
+const Persons = ({persons, filter, handleDelete}) => {
     return (
         <>
           {persons.map(person => 
-            <Person key={person.id} person={person} filter={filter} />
+            <Person key={person.id} person={person} filter={filter} handleDelete={() => handleDelete(person)} />
           )}
         </>
     )

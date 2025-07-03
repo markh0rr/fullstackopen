@@ -183,8 +183,20 @@ Items generated from a list, with for example map must have a unique value set t
 - Don't use array index as keys!!!
 
 Declare each component in its own file as an ES6-module. Import them where needed.
-- export the component with `export default ComponentName`
-- import the component with `import ComponentName from 'componentFilePath'`
+- export one symbol with default export `export default symbol`, only one default per module
+- - import as `import renamedModule from module` and use as `module.symbol`
+- export multiple symbols with named export for every symbol `export symbol1 ... export symbol2`
+- - import as `import { symbol } from module `
+- it is possible to mix named and default export
+- to have symbols accessible as key of the module (accessible as moduleName.symbol), wrap the symbols within an object exported as default
+```js
+export default {
+    key1: symbol,
+    key2: symbol,
+    ...,
+    keyN: symbol,
+}
+```
 
 Conditional operator
 ```js
@@ -228,6 +240,12 @@ axios
     .then(result => {
         // do something
     })
+
+axios
+    .post("url", object)
+    .then(response => {
+        // do something
+    })
 ```
 
 axios autoamatically parses json responses when the response has the header app/json
@@ -236,6 +254,15 @@ three states of promises
 - pending, async operation is not finished yet
 - fulfilled, the operation has been completed and the value is available
 - rejected, an error happened
+
+`.then` always return a new promise
+
+handle errors:
+```js
+.catch(error => handle)
+```
+
+It is possible to chain multiple then, that will create a promise chain.
 
 ### Effect-hooks
 
@@ -258,6 +285,15 @@ The effect is executed immediately after rendering.
 By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
 - the second parameter is used to specify how often the effect is run
 - - if the second parameter is an empty array [], the effect runs only with the first render 
+
+=> single responsibity principle: extract the communication into its own module (src/services)
+
+### REST
+
+REST, we refer to individual data objects as resources.
+- every resource has a unique address associated with it, its URL
+- Resources are fetched with HTTP GET requests: /resources or /resource/id
+- Resources are inserted with HTTP request to the general URL: /resources
 
 ## Part 7: React router
 
@@ -345,6 +381,13 @@ Fake a REST API with `JSON Server` by providing a json file as the fake db
 ```
 npx json-server --port 3001 db.json
 ```
+
+- GET resource_name/ to get the list of resources
+- POST resource_name/ to insert a new resource
+- GET resource_name/id to get a specific resource
+- PUT resource_name/id to replace a specific resource
+- PATCH resource_name/id to replace some key value of the specific resource
+- DELETE resource_name/id to delete the specific resource
 
 ### npm
 
