@@ -189,6 +189,11 @@ Conditional operator
 const result = (condition)? val1 : val2
 ```
 
+String formats
+```js
+`${expression evaluation} some text`
+```
+
 ### Forms
 
 add a form submit handler with `onSubmit`
