@@ -173,6 +173,34 @@ Prior to hooks, components that required state had to be defined as class compon
 add handlers to JSX elements
 - `onClick={functionRef}`
 
+## Part 2: Communicating with server
+
+### Collection rendering
+
+Items generated from a list, with for example map must have a unique value set to their attribute `key`.
+- Don't use array index as keys!!!
+
+Declare each component in its own file as an ES6-module. Import them where needed.
+- export the component with `export default ComponentName`
+- import the component with `import ComponentName from 'componentFilePath'`
+
+Conditional operator
+```js
+const result = (condition)? val1 : val2
+```
+
+### Forms
+
+add a form submit handler with `onSubmit`
+
+controlled component
+- create a state for the user input
+- connect the input with the state, `value={state}`
+- provide a onChange handler for value change
+- the new value is in `event.target.value`
+
+
+
 ## Part 7: React router
 
 - old school web app, page change => http get request
@@ -225,6 +253,24 @@ let parameter = userParams().parameterName
 ```
 
 ## Tools
+
+### VSCode snippet
+
+Define abbreviation for reusable code blocks
+- code > settings > configure snippets
+
+Example for console.log:
+```
+{
+  "console.log": {
+    "prefix": "clog",
+    "body": [
+      "console.log('$1')",
+    ],
+    "description": "Log output to console"
+  }
+}
+```
 
 ### Chrome dev tools
 
