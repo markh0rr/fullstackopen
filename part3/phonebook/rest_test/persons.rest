@@ -9,3 +9,12 @@ GET http://localhost:3001/api/persons/10
 
 ### delete person entry
 DELETE http://localhost:3001/api/persons/1
+
+### add person entry
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Aretha Franklin",
+    "number": "(734) 592-4187"
+}

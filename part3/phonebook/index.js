@@ -24,6 +24,8 @@ let persons = [
     }
 ]
 
+app.use(express.json())
+
 app.get('/api/persons/', (req, resp) => {
     resp.json(persons)
 })
@@ -47,6 +49,21 @@ app.delete('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons', (req, res) => {
+  if(!req.body || !req.body.name || !req.body.number) {
+    return res.status(400).end()
+  }
+
+  const person = {
+    name: req.body.name,
+    content: req.body.number,
+    id: String(Math.ceil(Math.random()*3000))
+  }
+
+  persons = persons.concat(person)
+  res.json(person)
 })
 
 app.get('/info', (req, resp) => {
