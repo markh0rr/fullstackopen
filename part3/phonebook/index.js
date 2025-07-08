@@ -28,6 +28,16 @@ app.get('/api/persons/', (req, resp) => {
     resp.json(persons)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  const match = persons.filter(person => person.id === id)
+  if(match.length > 0) {
+    res.json(match[0])
+  } else {
+    res.status(404).end()
+  }
+})
+
 app.get('/info', (req, resp) => {
   const personsResume = `Phonebook as info for ${persons.length} people`
   const options = {
