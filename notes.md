@@ -291,10 +291,16 @@ By default, effects run after every completed render, but you can choose to fire
 
 ### REST
 
+REST: representational state transfer (architectural style to build scalable web apps)
+
 REST, we refer to individual data objects as resources.
-- every resource has a unique address associated with it, its URL
+- every resource has a unique address associated with it, resource unique address
+- - all resource list: resource in plural form
+- - specific resource item resource in singular form followed by unique identifier
 - Resources are fetched with HTTP GET requests: /resources or /resource/id
 - Resources are inserted with HTTP request to the general URL: /resources
+
+can be used to create CRUD apps.
 
 ### Adding style to React
 
@@ -311,6 +317,114 @@ Reacts also supports inline styles
 - kebab-case CSS properties are written in camelCase
 
 Since the separation of CSS, HTML, and JavaScript into separate files did not seem to scale well in larger applications, React bases the division of the application along the lines of its logical functional entities.
+
+## Part 3: NodeJs server and Express
+
+build a REST api with node.js + express library, data stored in mongoDB.
+
+NodeJs: js runtime based on google chrome V8
+
+node version:
+```sh
+node -v
+```
+
+init a node project:
+```sh
+npm init
+```
+
+Add a new script in `package.json`:
+```json
+"scripts" : {
+    "start": "node index.js"
+}
+```
+
+Run the app:
+- directly: `node index.js`
+- with the package.json script alias: `npm run start`
+
+The app main resides in `index.js`.
+
+### Http Web server
+
+Web server based on the built in http server module
+```js
+const http = require('http')
+
+const app = http.createServer((request, response) => {          // event handler called every 
+  response.writeHead(200, { 'Content-Type': 'text/plain' })     // time a HTTP request is made
+  response.end('Hello World')                                   // to the server
+})
+
+const PORT = 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
+```
+
+Nodes.js uses CommonJs modules, and not ES6 modules import/export.
+- now ES6 synthax is also supported
+- the reason, node.js neaded modules long before ES6
+
+Stringify the response, to send JSON
+- `JSON.stringify(object)`
+
+### Express
+
+Libraries developed to ease server-side development with Node.
+
+install:
+```sh
+npm install express
+```
+
+app blueprint
+```js
+const express = require('express')
+const app = express()
+
+// for each route (replace method with the associated method)
+app.method('/targeted_route/', (request, response) => {
+    // handler code
+})
+
+app.listen(PORT, () => {
+    // server successful start callback
+})
+```
+
+With the method being
+- get
+- post
+- delete
+- put
+
+Structure of the handler, same as for http:
+- request, contains all information of the http request
+- response, used to define how the request is responded to
+
+Response methods
+- `response.json(object)` to return a json object, higher level HTTP (sets header and stringifies)
+- `response.send(text)` to send text format response, higher level HTTP
+- `response.set('Content-Type', 'text/plain')` to set header values, must be called before send or json
+- `response.status(status_code)`, set the status code
+- `response.end()`, respond to the request without sending any data
+- finish the handler execution with `return response.send()`
+
+Request params
+- get all headers with `req.headers`
+- get a header with `req.get("value")`
+- get path params "/resource/SOMETHING"
+- - by writing the route as `/resource/:variable`
+- - retrieve the value with `request.params.variable`
+
+Parse input json data with express
+- add the json parser middleware, `app.use(express.json())` prior to any other processing
+- the parsed body can be accessed with `req.body`
+- without the json-parser, the body property would be undefined
+
+The spread operator ... transforms an array into individual elements.
 
 ## Part 7: React router
 
@@ -365,13 +479,13 @@ let parameter = userParams().parameterName
 
 ## Tools
 
-### VSCode snippet
+### VSCode 
 
-Define abbreviation for reusable code blocks
+Code snippet, define abbreviation for reusable code blocks
 - code > settings > configure snippets
 
 Example for console.log:
-```
+```json
 {
   "console.log": {
     "prefix": "clog",
@@ -433,3 +547,47 @@ run the command:
 ```sh
 npm run command
 ```
+
+update project dependencies:
+```sh
+npm update
+```
+
+dependency format (when updated, the two last versio can be updated to a new version, but the main version has to be the same to prevent disruptive updates):
+```json
+"express": "^4.21.2"
+```
+
+instead of stop + restart the app at every change, start the app with
+```sh
+node --watch index.js
+```
+
+### Vite
+
+Prevent hardcoding credentials in the code
+- idea: define the valuable information as environment variable
+- step1: when launching the server start, also set env var `export VITE_SOME_KEY=value && npm run dev`
+- step2: access the valuable information from the env in the code `const api_key = import.meta.env.VITE_SOME_KEY`
+- step3: when Vite builds your app, it replaces this line with the actual value at build time
+
+to prevent leaking env var to clients, only var prefixed with VITE_ are exposed to Vite.
+
+### REPL
+
+get an interactive command line with ndoe:
+```sh
+node
+```
+
+### HTTP interaction
+
+- curl, command line tool
+- postman
+- - GUI app
+- - vscode extension
+- vscode rest client plugin
+- - make a directory at the project root of the app called requests
+- - save all the REST requests in the directory as files with the .rest extension
+- - ++: request are available directly in the repository
+- - multiple request per file, separated with `###`
