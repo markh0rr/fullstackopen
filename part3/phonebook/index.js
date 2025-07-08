@@ -28,6 +28,26 @@ app.get('/api/persons/', (req, resp) => {
     resp.json(persons)
 })
 
+app.get('/info', (req, resp) => {
+  const personsResume = `Phonebook as info for ${persons.length} people`
+  const options = {
+    weekday: "short",
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Bucharest",   // the Date() object is always in UTC, timezone changes the displayed time
+  }
+  const parts = new Intl.DateTimeFormat("en-US", options).formatToParts(new Date()) // returns an array of object with type and value
+  const lookup = {}
+  parts.forEach(part => {lookup[part.type] = part.value})
+  const date = `${lookup.weekday} ${lookup.month} ${lookup.day} ${lookup.year} ${lookup.hour}:${lookup.minute}:${lookup.second} GMT+0200 (Eeastern European Standard Time)`
+  return resp.send(`${personsResume}<br/>${date}`)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`app runs on port ${PORT}`)
