@@ -30,9 +30,20 @@ app.get('/api/persons/', (req, resp) => {
 
 app.get('/api/persons/:id', (req, res) => {
   const id = req.params.id
-  const match = persons.filter(person => person.id === id)
-  if(match.length > 0) {
-    res.json(match[0])
+  const person = persons.find(person => person.id === id)
+  if(person) {
+    res.json(person)
+  } else {
+    res.status(404).end()
+  }
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  const person = persons.find(note => note.id === id)
+  persons = persons.filter(note => note.id !== id)
+  if(person) {
+    res.json(person)
   } else {
     res.status(404).end()
   }
