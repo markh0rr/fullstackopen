@@ -37,6 +37,8 @@ morgan.token("content", (req, resp) => {
 const MORGAN_MIDDLEWARE = morgan(':method :url :status :res[content-length] - :response-time ms :content')
 app.use(MORGAN_MIDDLEWARE)
 
+app.use(express.static('dist'))
+
 app.get('/api/persons/', (req, resp) => {
     resp.json(persons)
 })
