@@ -102,7 +102,7 @@ app.get('/info', (req, resp) => {
   return resp.send(`${personsResume}<br/>${date}`)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`app runs on port ${PORT}`)
 })

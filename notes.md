@@ -389,6 +389,8 @@ app.method('/targeted_route/', (request, response) => {
     // handler code
 })
 
+
+const PORT = process.env.PORT || 3001       // get the port from env variable or default as 3001
 app.listen(PORT, () => {
     // server successful start callback
 })
@@ -418,6 +420,8 @@ Request params
 - get path params "/resource/SOMETHING"
 - - by writing the route as `/resource/:variable`
 - - retrieve the value with `request.params.variable`
+- `req.method`, returns the HTTP method
+- `req.path`, returns the path of the targeted resource
 
 Parse input json data with express
 - add the json parser middleware, `app.use(express.json())` prior to any other processing
@@ -425,6 +429,55 @@ Parse input json data with express
 - without the json-parser, the body property would be undefined
 
 The spread operator ... transforms an array into individual elements.
+
+### HTTP request types
+
+HTTP requests should (as recommendations) have the safety and idempotence properties.
+- safety: executing request must not cause side effects on the server (data changes)
+- - GET and HEAD (returns status code and header) ought to be safe
+- idempotence, the side-effects of N > 0 identical requests is the same as for a single request 
+- - all except POST should be
+
+### Middleware
+
+express json-parser is a middleware
+
+function that can be used for handling request and response objects.
+- you can use several middlewares at once, executed one by one in their order of definition
+- receives 3 parameters, (req, res, next), next() function call yields control to the next middleware
+
+### GDPR
+
+> logging data even in the console can be dangerous since it can contain sensitive data and may violate local privacy law
+
+
+### Same origin policy and CORS
+
+same origin policy, a url's origin is defined by the combination of protocol + hostname + port
+- when the browser issues requests from one website to other origin resources (api, images, files) it has to the `Access-Control-Allow-origin` response header.
+- it the header contains * the browser will process the response, otherwise it will refuse to process it
+- it is a security mechanism
+
+CORS: cross origin resource sharing, allows restricted resources to be request from another domain
+
+Allow request from other origins with node's cors middleware:
+```sh
+npm install cors
+```
+
+use the middleware:
+```js
+const cors = require('cors')
+
+app.use(cors())
+```
+
+Make sure to configure the number of allowed cross origin by CORS to the least (only the frontend, ...).
+
+### Host the app
+
+Free plan PaaS (platfrom as a service):
+- render > new > web service
 
 ## Part 7: React router
 
