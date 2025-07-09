@@ -74,7 +74,7 @@ app.post('/api/persons', (req, res) => {
 
   const person = {
     name: req.body.name,
-    content: req.body.number,
+    number: req.body.number,
     id: String(Math.ceil(Math.random()*3000))
   }
 
@@ -83,7 +83,7 @@ app.post('/api/persons', (req, res) => {
 })
 
 app.get('/info', (req, resp) => {
-  const personsResume = `Phonebook as info for ${persons.length} people`
+  const personsResume = `Phonebook has info for ${persons.length} people`
   const options = {
     weekday: "short",
     month: "short",

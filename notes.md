@@ -479,6 +479,29 @@ Make sure to configure the number of allowed cross origin by CORS to the least (
 Free plan PaaS (platfrom as a service):
 - render > new > web service
 
+### Build the Frontend
+
+We must move from dev server to production build to deploy the React app.
+
+Create a production build:
+```sh
+npm run build
+```
+
+The result can be found in `dist/`
+- with index.html the only html file of the app
+- minified version of the JS code in one single file
+
+One option to deploy this:
+- serve the content of `dist/` by the backend
+
+Serve static content with `express.static` middleware
+```js
+app.use(express.static('dist'))
+```
+
+When a GET request arrives, Express first check if the dist directory contains a file corresponding to the request's address.
+
 ## Part 7: React router
 
 - old school web app, page change => http get request
@@ -625,6 +648,24 @@ Prevent hardcoding credentials in the code
 - step3: when Vite builds your app, it replaces this line with the actual value at build time
 
 to prevent leaking env var to clients, only var prefixed with VITE_ are exposed to Vite.
+
+Vite include a proxy mechanism (any request made to the proxy route, will be forwarded to the target), add the following declaration in `vite.config.js`:
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/route': {
+        target: 'redirect',
+        changeOrigin: true,
+      },
+    }
+  },
+})
+```
 
 ### REPL
 
